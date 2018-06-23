@@ -32,7 +32,7 @@ saleConMasde1(Alguien):-
     pareja(Alguien, Persona2), 
     Persona1\=Persona2.
 
-acataOrden(Jefe, Empleado):-       % Punto 5
+acataOrden(Jefe, Empleado):-       % Punto 5 (arreglar)
     trabajaPara(Jefe, Empleado).
 
 acataOrden(Jefe, Empleado):-
