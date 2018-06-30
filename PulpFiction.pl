@@ -32,8 +32,9 @@ saleConMasde1(Alguien):-
     pareja(Alguien, Persona2), 
     Persona1\=Persona2.
 
-acataOrden(Jefe, Empleado):-       % Punto 5 (arreglar)
-    trabajaPara(Jefe, Empleado).
-
-acataOrden(Jefe, Empleado):-
-    acataOrden(Jefe, Empleado).
+acataOrden(Jefe,Empleado):-						% Punto 5 (Mas acertado :3)
+  forall(trabajaPara(Jefe,Alguien),trabajaPara(Alguien,Empleado)).
+  
+acataOrden(Jefe,Empleado):-
+  trabajaPara(Jefe,Empleado),
+  Jefe\=Empleado.
