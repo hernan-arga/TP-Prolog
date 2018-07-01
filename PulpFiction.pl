@@ -1,4 +1,4 @@
-% Información base 		(parte 2)
+% InformaciÃ³n base 		(parte 2)
 % personaje(Nombre, Ocupacion)
 personaje(pumkin,     ladron([estacionesDeServicio, licorerias])).
 personaje(honeyBunny, ladron([licorerias, estacionesDeServicio])).
@@ -62,7 +62,7 @@ saleConMasde1(Alguien):-
     pareja(Alguien, Persona2), 
     Persona1\=Persona2.
 
-acataOrden(Jefe,Empleado):-						% Punto 5 (parte 1)
+acataOrden(Jefe,Empleado):-			   % Punto 5 (parte 1)
   trabajaPara(Alguien, Empleado),
   acataOrden(Jefe, Alguien).
   
