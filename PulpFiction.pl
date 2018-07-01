@@ -30,25 +30,25 @@ amigo(vincent, elVendedor).		% Hasta aca es todo para la parte 2
 
 pareja(marsellus, mia).
 pareja(pumkin, honeyBunny).
-pareja(bernardo, bianca).                % Punto 2
+pareja(bernardo, bianca).                % Punto 2 (parte 1)
 pareja(bernardo, charo).
 
 trabajaPara(marsellus, vincent).
 trabajaPara(marsellus, jules).
 trabajaPara(marsellus, winston).
-trabajaPara(Alguien, bernardo):-        % Punto 3
+trabajaPara(Alguien, bernardo):-        % Punto 3 (parte 1)
     trabajaPara(marsellus, Alguien),
     Alguien\=jules.
 trabajaPara(Alguien, george):-
     pareja(bernardo, Alguien).
 
 
-saleCon(Persona1, Persona2):-           % Punto 1
+saleCon(Persona1, Persona2):-           % Punto 1 (parte 1)
     pareja(Persona1, Persona2).
 saleCon(Persona1, Persona2):-
     pareja(Persona2, Persona1).
 
-esFiel(Alguien):-                       % Punto 4
+esFiel(Alguien):-                       % Punto 4 (parte 1)
     tienePareja(Alguien),
     not(saleConMasde1(Alguien)).
 
@@ -62,9 +62,67 @@ saleConMasde1(Alguien):-
     pareja(Alguien, Persona2), 
     Persona1\=Persona2.
 
-acataOrden(Jefe,Empleado):-						% Punto 5 (Mas acertado :3)
-  forall(trabajaPara(Jefe,Alguien),trabajaPara(Alguien,Empleado)).
+acataOrden(Jefe,Empleado):-						% Punto 5 (parte 1)
+  trabajaPara(Alguien, Empleado),
+  acataOrden(Jefe, Alguien).
   
 acataOrden(Jefe,Empleado):-
   trabajaPara(Jefe,Empleado),
   Jefe\=Empleado.
+
+esPeligroso(Alguien):-                         % Punto 1 (parte 2)
+    realizaActividadPeligrosa(Alguien).
+esPeligroso(Alguien):-
+    tieneJefePeligroso(Alguien).
+
+tieneJefePeligroso(Alguien):-
+    acataOrden(Jefe, Alguien),
+    esPeligroso(Jefe).
+
+realizaActividadPeligrosa(Alguien):-
+    personaje(Alguien, mafioso(maton)).
+
+realizaActividadPeligrosa(Alguien):-
+    personaje(Alguien, ladron(Lugares)),
+    member(licorerias, Lugares).
+
+sanCayetano(Alguien):-                         % Punto 2 (parte 2)
+ tieneCerca(Alguien,_),
+ forall(tieneCerca(Alguien,Cercano),encargo(Alguien,Cercano,_)).
+ 
+tieneCerca(Alguien,Cercano):-   
+ amigo(Alguien,Cercano).
+
+tieneCerca(Alguien,Cercano):-   
+ amigo(Cercano,Alguien).
+ 
+tieneCerca(Alguien,Cercano):-
+ trabajaPara(Alguien,Cercano).
+ 
+tieneCerca(Alguien,Cercano):-
+ trabajaPara(Cercano,Alguien).
+
+nivelRespeto(Alguien, Nivel):-                % Punto 3 (parte 2)
+    personaje(Alguien, actriz(Peliculas)),
+    length(Peliculas, Cantidad),
+    Nivel is Cantidad/10.
+nivelRespeto(Alguien, 10):-
+    personaje(Alguien, mafioso(resuelveProblemas)).
+nivelRespeto(Alguien, 20):-
+    personaje(Alguien, mafioso(capo)).
+nivelRespeto(vincent, 15).
+
+respetabilidad(Respetables, NoRespetables):- % Punto 4 (parte 2)
+    findall(Personaje, (nivelRespeto(Personaje, Nivel), Nivel>9), PersonajesRespetables),
+    findall(Personaje, (personaje(Personaje, _), not(member(Personaje, PersonajesRespetables))), PersonajesNoRespetables),
+    length(PersonajesRespetables, Respetables),
+    length(PersonajesNoRespetables, NoRespetables).
+
+cantidadEncargos(Alguien, Cantidad):-        % Punto 5 (parte 2)
+    personaje(Alguien, _),
+    findall(Tarea, encargo(_, Alguien, Tarea), Tareas),
+    length(Tareas, Cantidad).
+
+masAtareado(Alguien):-
+    cantidadEncargos(Alguien, Cantidad),
+    forall((personaje(Alguien2, _), Alguien\=Alguien2), (cantidadEncargos(Alguien2, Cantidad2), Cantidad2<Cantidad)).
